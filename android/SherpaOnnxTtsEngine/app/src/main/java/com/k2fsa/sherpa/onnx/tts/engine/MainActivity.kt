@@ -328,11 +328,16 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun normalizeAudio(samples: FloatArray): FloatArray {
-        val max = samples.max() ?: return samples
-        if (max == 0.0f) {
+        val targetRms = 0.05f
+        var sumOfSquares = 0.0f
+        for (sample in samples) {
+            sumOfSquares += sample * sample
+        }
+        val rms = Math.sqrt((sumOfSquares / samples.size).toDouble()).toFloat()
+        if (rms == 0.0f) {
             return samples
         }
-        val scale = 0.9f / max
+        val scale = targetRms / rms
         for (i in samples.indices) {
             samples[i] *= scale
         }
@@ -342,7 +347,13 @@ class MainActivity : ComponentActivity() {
     // this function is called from C++
     private fun callback(samples: FloatArray): Int {
         if (!stopped) {
-            val normalizedSamples = normalizeAudio(samples.copyOf())
+            val samplesCopy = samples.copyOf()
+            if (TtsEngine.lang == "eng") {
+                for (i in samplesCopy.indices) {
+                    samplesCopy[i] *= 0.5f
+                }
+            }
+            val normalizedSamples = normalizeAudio(samplesCopy)
             CoroutineScope(Dispatchers.IO).launch {
                 samplesChannel.send(normalizedSamples)
             }
