@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">TTS-Engine: Next-gen Kaldi</string>
+    <string name="app_title">Next-gen Kaldi: TTS-Engine</string>
+    <string name="speed">Geschwindigkeit</string>
+    <string name="speaker_id">Sprecher-ID: (0-%1$d)</string>
+    <string name="text_hint">Bitte geben Sie hier Ihren Text ein</string>
+    <string name="generate_toast">Bitte geben Sie einen Text zum Generieren ein</string>
+    <string name="start">Start</string>
+    <string name="play">Abspielen</string>
+    <string name="stop">Stopp</string>
+    <string name="rtf_text">Anzahl der Threads: %1$d
+Verstrichen: %.3f s
+Audiodauer: %.3f s
+RTF: %.3f/%.3f = %.3f</string>
+    <string name="language">Sprache</string>
+</resources>

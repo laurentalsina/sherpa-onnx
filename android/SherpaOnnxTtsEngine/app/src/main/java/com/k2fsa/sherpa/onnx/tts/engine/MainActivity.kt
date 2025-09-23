@@ -237,15 +237,10 @@ class MainActivity : ComponentActivity() {
                                                     val audioDuration =
                                                         audio.samples.size / TtsEngine.tts!!.sampleRate()
                                                             .toFloat()
-                                                    val RTF = String.format(
-                                                        getString(R.string.rtf_text),
-                                                        TtsEngine.tts!!.config.model.numThreads.toInt(),
-                                                        elapsed,
-                                                        audioDuration,
-                                                        elapsed,
-                                                        audioDuration,
-                                                        elapsed / audioDuration
-                                                    )
+                                                    val RTF = "Number of threads: " + TtsEngine.tts!!.config.model.numThreads.toInt() + "\n" +
+                                                            "Elapsed: " + String.format("%.3f", elapsed.toFloat()) + " s\n" +
+                                                            "Audio duration: " + String.format("%.3f", audioDuration.toFloat()) + " s\n" +
+                                                            "RTF: " + String.format("%.3f", elapsed.toFloat()) + "/" + String.format("%.3f", audioDuration.toFloat()) + " = " + String.format("%.3f", (elapsed / audioDuration).toFloat())
 
                                                     val filename =
                                                         application.filesDir.absolutePath + "/generated.wav"
