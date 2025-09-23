@@ -327,12 +327,24 @@ class MainActivity : ComponentActivity() {
         stopMediaPlayer()
     }
 
+    private fun normalizeAudio(samples: FloatArray): FloatArray {
+        val max = samples.max() ?: return samples
+        if (max == 0.0f) {
+            return samples
+        }
+        val scale = 0.9f / max
+        for (i in samples.indices) {
+            samples[i] *= scale
+        }
+        return samples
+    }
+
     // this function is called from C++
     private fun callback(samples: FloatArray): Int {
         if (!stopped) {
-            val samplesCopy = samples.copyOf()
+            val normalizedSamples = normalizeAudio(samples.copyOf())
             CoroutineScope(Dispatchers.IO).launch {
-                samplesChannel.send(samplesCopy)
+                samplesChannel.send(normalizedSamples)
             }
             return 1
         } else {
