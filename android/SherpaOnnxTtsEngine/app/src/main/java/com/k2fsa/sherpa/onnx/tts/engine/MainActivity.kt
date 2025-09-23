@@ -93,6 +93,8 @@ class MainActivity : ComponentActivity() {
                     }) {
                         Box(modifier = Modifier.padding(it)) {
                             Column(modifier = Modifier.padding(16.dp)) {
+                                var testText by remember { mutableStateOf(getSampleText(TtsEngine.lang ?: "")) }
+
                                 Column {
                                     var expanded by remember { mutableStateOf(false) }
                                     var selectedModel by remember { mutableStateOf(allModels[0]) }
@@ -110,6 +112,7 @@ class MainActivity : ComponentActivity() {
                                                 selectedModel = model
                                                 expanded = false
                                                 TtsEngine.recreateTts(this@MainActivity, model)
+                                                testText = getSampleText(model.lang)
                                             })
                                         }
                                     }
@@ -128,9 +131,6 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
 
-                                val testTextContent = getSampleText(TtsEngine.lang ?: "")
-
-                                var testText by remember { mutableStateOf(testTextContent) }
                                 var startEnabled by remember { mutableStateOf(true) }
                                 var playEnabled by remember { mutableStateOf(false) }
                                 var rtfText by remember {
