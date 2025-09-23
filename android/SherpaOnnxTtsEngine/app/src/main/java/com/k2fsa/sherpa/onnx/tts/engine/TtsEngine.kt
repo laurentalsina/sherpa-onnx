@@ -94,10 +94,10 @@ object TtsEngine {
         // Example 2:
         // https://github.com/k2-fsa/sherpa-onnx/releases/tag/tts-models
         // https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-piper-en_US-amy-low.tar.bz2
-        // modelDir = "vits-piper-en_US-amy-low"
-        // modelName = "en_US-amy-low.onnx"
-        // dataDir = "vits-piper-en_US-amy-low/espeak-ng-data"
-        // lang = "eng"
+        modelDir = "vits-piper-en_US-amy-low"
+        modelName = "en_US-amy-low.onnx"
+        dataDir = "vits-piper-en_US-amy-low/espeak-ng-data"
+        lang = "eng"
 
         // Example 3:
         // https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-icefall-zh-aishell3.tar.bz2
