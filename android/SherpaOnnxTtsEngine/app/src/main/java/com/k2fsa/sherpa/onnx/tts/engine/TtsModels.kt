@@ -10,7 +10,7 @@ val allModels = listOf(
         lang = "eng",
     ),
     TtsModel(
-        modelDir = "vits-coqui-de-css10",
+        modelDir = "vits-mms-deu",
         modelName = "model.onnx",
         lang = "deu",
     )
