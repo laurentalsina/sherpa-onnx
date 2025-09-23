@@ -26,6 +26,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -33,6 +35,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -86,12 +89,34 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Scaffold(topBar = {
-                        TopAppBar(title = { Text("Next-gen Kaldi: TTS Engine") })
+                        TopAppBar(title = { Text(getString(R.string.app_title)) })
                     }) {
                         Box(modifier = Modifier.padding(it)) {
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Column {
-                                    Text("Speed " + String.format("%.1f", TtsEngine.speed))
+                                    var expanded by remember { mutableStateOf(false) }
+                                    var selectedModel by remember { mutableStateOf(allModels[0]) }
+
+                                    Text(getString(R.string.language) + ": " + selectedModel.lang)
+                                    TextButton(onClick = { expanded = true }) {
+                                        Text(selectedModel.lang)
+                                    }
+                                    DropdownMenu(
+                                        expanded = expanded,
+                                        onDismissRequest = { expanded = false }
+                                    ) {
+                                        allModels.forEach { model ->
+                                            DropdownMenuItem(text = { Text(model.lang) }, onClick = {
+                                                selectedModel = model
+                                                expanded = false
+                                                TtsEngine.recreateTts(this@MainActivity, model)
+                                            })
+                                        }
+                                    }
+                                }
+
+                                Column {
+                                    Text(getString(R.string.speed) + " " + String.format("%.1f", TtsEngine.speed))
                                     Slider(
                                         value = TtsEngine.speedState.value,
                                         onValueChange = {
@@ -131,7 +156,7 @@ class MainActivity : ComponentActivity() {
                                             preferenceHelper.setSid(TtsEngine.speakerId)
                                         },
                                         label = {
-                                            Text("Speaker ID: (0-${numSpeakers - 1})")
+                                            Text(getString(R.string.speaker_id, numSpeakers - 1))
                                         },
                                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                         modifier = Modifier
@@ -144,7 +169,7 @@ class MainActivity : ComponentActivity() {
                                 OutlinedTextField(
                                     value = testText,
                                     onValueChange = { testText = it },
-                                    label = { Text("Please input your text here") },
+                                    label = { Text(getString(R.string.text_hint)) },
                                     maxLines = 10,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -163,7 +188,7 @@ class MainActivity : ComponentActivity() {
                                             if (testText.isBlank() || testText.isEmpty()) {
                                                 Toast.makeText(
                                                     applicationContext,
-                                                    "Please input some text to generate",
+                                                    getString(R.string.generate_toast),
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                             } else {
@@ -213,8 +238,8 @@ class MainActivity : ComponentActivity() {
                                                         audio.samples.size / TtsEngine.tts!!.sampleRate()
                                                             .toFloat()
                                                     val RTF = String.format(
-                                                        "Number of threads: %d\nElapsed: %.3f s\nAudio duration: %.3f s\nRTF: %.3f/%.3f = %.3f",
-                                                        TtsEngine.tts!!.config.model.numThreads,
+                                                        getString(R.string.rtf_text),
+                                                        TtsEngine.tts!!.config.model.numThreads.toInt(),
                                                         elapsed,
                                                         audioDuration,
                                                         elapsed,
@@ -241,7 +266,7 @@ class MainActivity : ComponentActivity() {
                                                 }.start()
                                             }
                                         }) {
-                                        Text("Start")
+                                        Text(getString(R.string.start))
                                     }
 
                                     Button(
@@ -253,7 +278,7 @@ class MainActivity : ComponentActivity() {
                                             track.flush()
                                             onClickPlay()
                                         }) {
-                                        Text("Play")
+                                        Text(getString(R.string.play))
                                     }
 
                                     Button(
@@ -262,7 +287,7 @@ class MainActivity : ComponentActivity() {
                                             onClickStop()
                                             startEnabled = true
                                         }) {
-                                        Text("Stop")
+                                        Text(getString(R.string.stop))
                                     }
                                 }
                                 if (rtfText.isNotEmpty()) {

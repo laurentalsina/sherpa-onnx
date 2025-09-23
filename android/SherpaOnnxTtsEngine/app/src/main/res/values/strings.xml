@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">TTS Engine: Next-gen Kaldi</string>
+    <string name="app_title">Next-gen Kaldi: TTS Engine</string>
+    <string name="speed">Speed</string>
+    <string name="speaker_id">Speaker ID: (0-%1$d)</string>
+    <string name="text_hint">Please input your text here</string>
+    <string name="generate_toast">Please input some text to generate</string>
+    <string name="start">Start</string>
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
+    <string name="rtf_text">Number of threads: %1$d
+Elapsed: %.3f s
+Audio duration: %.3f s
+RTF: %.3f/%.3f = %.3f</string>
+    <string name="language">Language</string>
 </resources>

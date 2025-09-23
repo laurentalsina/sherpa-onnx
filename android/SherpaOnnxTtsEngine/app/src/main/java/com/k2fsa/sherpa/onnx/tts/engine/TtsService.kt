@@ -54,14 +54,17 @@ Failed to get default language from engine com.k2fsa.sherpa.chapter5
 */
 
 class TtsService : TextToSpeechService() {
+    private var availableLanguages: MutableSet<String> = mutableSetOf()
+
     override fun onCreate() {
         Log.i(TAG, "onCreate tts service")
         super.onCreate()
 
-        // see https://github.com/Miserlou/Android-SDK-Samples/blob/master/TtsEngine/src/com/example/android/ttsengine/RobotSpeakTtsService.java#L68
-        onLoadLanguage(TtsEngine.lang, "", "")
-        if (TtsEngine.lang2 != null) {
-            onLoadLanguage(TtsEngine.lang2, "", "")
+        for (model in allModels) {
+            onLoadLanguage(model.lang, "", "")
+            if (model.lang2 != null) {
+                onLoadLanguage(model.lang2, "", "")
+            }
         }
     }
 
@@ -73,12 +76,11 @@ class TtsService : TextToSpeechService() {
     // https://developer.android.com/reference/kotlin/android/speech/tts/TextToSpeechService#onislanguageavailable
     override fun onIsLanguageAvailable(_lang: String?, _country: String?, _variant: String?): Int {
         val lang = _lang ?: ""
-
-        if (lang == TtsEngine.lang || lang == TtsEngine.lang2) {
-            return TextToSpeech.LANG_AVAILABLE
+        return if (availableLanguages.contains(lang)) {
+            TextToSpeech.LANG_AVAILABLE
+        } else {
+            TextToSpeech.LANG_NOT_SUPPORTED
         }
-
-        return TextToSpeech.LANG_NOT_SUPPORTED
     }
 
     override fun onGetLanguage(): Array<String> {
@@ -89,13 +91,14 @@ class TtsService : TextToSpeechService() {
     override fun onLoadLanguage(_lang: String?, _country: String?, _variant: String?): Int {
         Log.i(TAG, "onLoadLanguage: $_lang, $_country")
         val lang = _lang ?: ""
-
-        return if (lang == TtsEngine.lang || lang == TtsEngine.lang2) {
+        val model = allModels.find { it.lang == lang || it.lang2 == lang }
+        return if (model != null) {
             Log.i(TAG, "creating tts, lang :$lang")
-            TtsEngine.createTts(application)
+            TtsEngine.createTts(application, model)
+            availableLanguages.add(lang)
             TextToSpeech.LANG_AVAILABLE
         } else {
-            Log.i(TAG, "lang $lang not supported, tts engine lang: ${TtsEngine.lang}, ${TtsEngine.lang2}")
+            Log.i(TAG, "lang $lang not supported")
             TextToSpeech.LANG_NOT_SUPPORTED
         }
     }

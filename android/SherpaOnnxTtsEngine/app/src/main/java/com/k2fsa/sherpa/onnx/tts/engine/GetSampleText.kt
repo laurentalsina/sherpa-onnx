@@ -38,8 +38,7 @@ fun getSampleText(lang: String): String {
         }
 
         "deu" -> {
-            text =
-                "Dies ist eine Text-to-Speech-Engine, die Kaldi der nächsten Generation verwendet"
+            text = "Bitte zahlen Sie 10 Euros und 25 Cents"
         }
 
         "ell" -> {
@@ -47,7 +46,7 @@ fun getSampleText(lang: String): String {
         }
 
         "eng" -> {
-            text = "How are you doing today? This is a text-to-speech engine using next generation Kaldi"
+            text = "Please pay 10 Euros and 25 Cents"
         }
 
         "est" -> {
@@ -59,7 +58,7 @@ fun getSampleText(lang: String): String {
         }
 
         "fra" -> {
-            text = "Il s'agit d'un moteur de synthèse vocale utilisant Kaldi de nouvelle génération"
+            text = "Payez s'il vous plait 10 Euros et 25 Cents"
         }
 
         "gle" -> {
