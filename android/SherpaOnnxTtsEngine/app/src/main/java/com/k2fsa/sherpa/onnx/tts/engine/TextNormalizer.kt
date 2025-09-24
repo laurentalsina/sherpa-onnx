@@ -1,19 +1,26 @@
 package com.k2fsa.sherpa.onnx.tts.engine
 
-import pl.allegro.finance.tradukisto.MoneyConverters
+import pl.allegro.finance.tradukisto.internal.Container
 
 object TextNormalizer {
-    private val converter = MoneyConverters.FRENCH_BANKING_MONEY_VALUE
+    private val frInt = Container.frenchContainer().getIntegerConverter()
+    //private val enInt = Container.englishContainer().getIntegerConverter()
 
-    fun normalize(text: String): String {
+    // lang: "fra" or "eng" or "deu" etc
+    @Synchronized
+    fun normalize(text: String, lang: String?): String {
+         String
+        if (lang.equals("fra", true)) {
+            val conv = frInt
+        } else {
+            // only french needs this
+            return text
+        }
+
         val regex = Regex("\\d+")
-        return regex.replace(text) { matchResult ->
-            val number = matchResult.value.toBigDecimalOrNull()
-            if (number != null) {
-                converter.asWords(number)
-            } else {
-                matchResult.value
-            }
+        return regex.replace(text) { m ->
+            val n = m.value.toIntOrNull()
+            if (n != null) conv.asWords(n) else m.value
         }
     }
 }

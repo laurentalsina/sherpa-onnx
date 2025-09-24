@@ -20,8 +20,8 @@ object TtsEngine {
     // https://en.wikipedia.org/wiki/ISO_639-3
     // Example:
     // eng for English,
-    // deu for German
-    // cmn for Mandarin
+    // deu for German,
+    // fra for French
     var lang: String? = null
 
     // if a model supports two languages, set also lang2

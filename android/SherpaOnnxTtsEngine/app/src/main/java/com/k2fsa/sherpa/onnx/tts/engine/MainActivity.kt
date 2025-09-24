@@ -224,7 +224,7 @@ class MainActivity : ComponentActivity() {
                                                     val timeSource = TimeSource.Monotonic
                                                     val startTime = timeSource.markNow()
 
-                                                    val normalizedText = TextNormalizer.normalize(testText)
+                                                    val normalizedText = TextNormalizer.normalize(testText, TtsEngine.lang)
                                                     Log.i(TAG, "Normalized text: $normalizedText")
                                                     val audio =
                                                         TtsEngine.tts!!.generateWithCallback(
