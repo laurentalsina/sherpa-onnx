@@ -14,5 +14,10 @@ val allModels = listOf(
         modelName = "de_DE-thorsten-low.onnx",
         dataDir = "vits-piper-de_DE-thorsten-low/espeak-ng-data",
         lang = "deu",
+    ),
+    TtsModel(
+        modelDir = "vits-mms-fra",
+        modelName = "model.onnx",
+        lang = "fra",
     )
 )

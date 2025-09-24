@@ -58,7 +58,7 @@ fun getSampleText(lang: String): String {
         }
 
         "fra" -> {
-            text = "Payez s'il vous plait 10 Euros et 25 Cents"
+            text = "Veuillez payer 10 euros et 25 centimes."
         }
 
         "gle" -> {
