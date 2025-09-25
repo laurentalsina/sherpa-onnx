@@ -13,8 +13,7 @@ object TextNormalizer {
         if (lang.equals("fra", true)) {
             val conv = frInt
             val regex = Regex("\\d+")
-            val cleanedText = text.replace(Regex("[^\\w\\s]"), "").lowercase()
-            return regex.replace(cleanedText) { m ->
+            return regex.replace(text) { m ->
                 val n = m.value.toIntOrNull()
                 if (n != null) conv.asWords(n) else m.value
             }
