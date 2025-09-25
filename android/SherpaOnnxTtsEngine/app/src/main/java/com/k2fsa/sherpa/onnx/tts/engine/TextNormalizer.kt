@@ -12,15 +12,14 @@ object TextNormalizer {
          String
         if (lang.equals("fra", true)) {
             val conv = frInt
+            val regex = Regex("\\d+")
+            return regex.replace(text) { m ->
+                val n = m.value.toIntOrNull()
+                if (n != null) conv.asWords(n) else m.value
+            }
         } else {
-            // only french needs this
+            // only french needs this so far
             return text
-        }
-
-        val regex = Regex("\\d+")
-        return regex.replace(text) { m ->
-            val n = m.value.toIntOrNull()
-            if (n != null) conv.asWords(n) else m.value
         }
     }
 }

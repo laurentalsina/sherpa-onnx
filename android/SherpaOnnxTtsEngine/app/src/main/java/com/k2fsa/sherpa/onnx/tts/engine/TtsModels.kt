@@ -18,6 +18,7 @@ val allModels = listOf(
     TtsModel(
         modelDir = "vits-mms-fra",
         modelName = "model.onnx",
+        dataDir = "vits-mms-fra/espeak-ng-data",
         lang = "fra",
     )
 )
