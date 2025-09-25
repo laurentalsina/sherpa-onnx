@@ -224,39 +224,41 @@ class MainActivity : ComponentActivity() {
                                                     val timeSource = TimeSource.Monotonic
                                                     val startTime = timeSource.markNow()
 
-                                                    val sentences = testText.split(Regex("(?<=[.?!])\\s*"))
-                                                    for (sentence in sentences) {
-                                                        if (sentence.isNotBlank()) {
-                                                            val normalizedText = TextNormalizer.normalize(sentence, TtsEngine.lang)
-                                                            Log.i(TAG, "Normalized text: $normalizedText")
-                                                            TtsEngine.tts!!.generateWithCallback(
-                                                                text = normalizedText,
-                                                                sid = TtsEngine.speakerId,
-                                                                speed = TtsEngine.speed,
-                                                                callback = ::callback,
-                                                            )
-                                                            // Add a pause after each sentence
-                                                            val silence = FloatArray((TtsEngine.tts!!.sampleRate() * 0.2).toInt())
-                                                            samplesChannel.send(silence)
-                                                        }
-                                                    }
+                                                    val normalizedText = TextNormalizer.normalize(testText, TtsEngine.lang)
+                                                    Log.i(TAG, "Normalized text: $normalizedText")
+                                                    val audio =
+                                                        TtsEngine.tts!!.generateWithCallback(
+                                                            text = normalizedText,
+                                                            sid = TtsEngine.speakerId,
+                                                            speed = TtsEngine.speed,
+                                                            callback = ::callback,
+                                                        )
 
                                                     val elapsed =
                                                         startTime.elapsedNow().inWholeMilliseconds.toFloat() / 1000;
+                                                    val audioDuration =
+                                                        audio.samples.size / TtsEngine.tts!!.sampleRate()
+                                                            .toFloat()
+                                                    val RTF = "Number of threads: " + TtsEngine.tts!!.config.model.numThreads.toInt() + "\n" +
+                                                            "Elapsed: " + String.format("%.3f", elapsed.toFloat()) + " s\n" +
+                                                            "Audio duration: " + String.format("%.3f", audioDuration.toFloat()) + " s\n" +
+                                                            "RTF: " + String.format("%.3f", elapsed.toFloat()) + "/" + String.format("%.3f", audioDuration.toFloat()) + " = " + String.format("%.3f", (elapsed / audioDuration).toFloat())
 
-                                                    // The following code is commented out as it's not clear how to calculate the audio duration and RTF for multiple sentences.
-                                                    // val audioDuration =
-                                                    //     audio.samples.size / TtsEngine.tts!!.sampleRate()
-                                                    //         .toFloat()
-                                                    // val RTF = "Number of threads: " + TtsEngine.tts!!.config.model.numThreads.toInt() + "\n" +
-                                                    //         "Elapsed: " + String.format("%.3f", elapsed.toFloat()) + " s\n" +
-                                                    //         "Audio duration: " + String.format("%.3f", audioDuration.toFloat()) + " s\n" +
-                                                    //         "RTF: " + String.format("%.3f", elapsed.toFloat()) + "/" + String.format("%.3f", audioDuration.toFloat()) + " = " + String.format("%.3f", (elapsed / audioDuration).toFloat())
+                                                    val filename =
+                                                        application.filesDir.absolutePath + "/generated.wav"
 
-                                                    withContext(Dispatchers.Main) {
-                                                        startEnabled = true
-                                                        playEnabled = true
-                                                        // rtfText = RTF
+
+                                                    val ok =
+                                                        audio.samples.isNotEmpty() && audio.save(
+                                                            filename
+                                                        )
+
+                                                    if (ok) {
+                                                        withContext(Dispatchers.Main) {
+                                                            startEnabled = true
+                                                            playEnabled = true
+                                                            rtfText = RTF
+                                                        }
                                                     }
                                                 }.start()
                                             }

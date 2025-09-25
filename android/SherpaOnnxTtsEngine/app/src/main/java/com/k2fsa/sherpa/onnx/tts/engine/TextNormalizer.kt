@@ -9,17 +9,17 @@ object TextNormalizer {
     // lang: "fra" or "eng" or "deu" etc
     @Synchronized
     fun normalize(text: String, lang: String?): String {
-         String
+        val cleanedText = text.replace(Regex("[^\\w\\s]"), "")
         if (lang.equals("fra", true)) {
             val conv = frInt
             val regex = Regex("\\d+")
-            return regex.replace(text) { m ->
+            return regex.replace(cleanedText) { m ->
                 val n = m.value.toIntOrNull()
                 if (n != null) conv.asWords(n) else m.value
             }
         } else {
             // only french needs this so far
-            return text
+            return cleanedText
         }
     }
 }
